@@ -121,7 +121,7 @@ def main():
                     logging.info(f"识别中 {task_resp.remark}")
                 case ResultStateEnum.ERROR:
                     logging.error(f"识别失败 {task_resp.remark}")
-                    sys.exit(-1)
+                    return -1
                 case ResultStateEnum.COMPLETE:
                     logging.info(f"识别成功")
                     outfile_name = f"{infile_name.rsplit('.', 1)[-2]}.{outfile_fmt}"

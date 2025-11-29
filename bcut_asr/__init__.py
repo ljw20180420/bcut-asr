@@ -16,6 +16,8 @@ from .orm import (
     TaskCreateRspSchema,
 )
 
+from .__main__ import ffmpeg_render
+
 __version__ = "0.0.3"
 
 API_BASE_URL = "https://member.bilibili.com/x/bcut/rubick-interface"
@@ -36,16 +38,6 @@ SUPPORT_SOUND_FORMAT = Literal["flac", "aac", "m4a", "mp3", "wav"]
 
 INFILE_FMT = ["flac", "aac", "m4a", "mp3", "wav"]
 OUTFILE_FMT = ["srt", "json", "lrc", "txt"]
-
-
-def ffmpeg_render(media_file: str) -> bytes:
-    "提取视频伴音并转码为aac格式"
-    out, err = (
-        ffmpeg.input(media_file, v="warning")
-        .output("pipe:", ac=1, format="adts")
-        .run(capture_stdout=True)
-    )
-    return out
 
 
 def run_everywhere(argg):
@@ -162,6 +154,7 @@ class APIError(Exception):
 
 class BcutASR:
     "必剪 语音识别接口"
+
     session: requests.Session
     sound_name: str
     sound_bin: bytes
@@ -177,7 +170,7 @@ class BcutASR:
     task_id: str
 
     def __init__(self, file: Optional[str | PathLike] = None) -> None:
-        self.session = requests.Session()
+        self.session: requests.Session = requests.Session()
         self.task_id = None
         self.__etags = []
         if file:
@@ -229,7 +222,7 @@ class BcutASR:
         code = resp["code"]
         if code:
             raise APIError(code, resp["message"])
-        resp_data = ResourceCreateRspSchema.parse_obj(resp["data"])
+        resp_data = ResourceCreateRspSchema.model_validate(resp["data"])
         self.__in_boss_key = resp_data.in_boss_key
         self.__resource_id = resp_data.resource_id
         self.__upload_id = resp_data.upload_id
