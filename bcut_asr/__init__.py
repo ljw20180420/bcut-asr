@@ -16,8 +16,6 @@ from .orm import (
     TaskCreateRspSchema,
 )
 
-from .__main__ import ffmpeg_render
-
 __version__ = "0.0.3"
 
 API_BASE_URL = "https://member.bilibili.com/x/bcut/rubick-interface"
@@ -38,6 +36,16 @@ SUPPORT_SOUND_FORMAT = Literal["flac", "aac", "m4a", "mp3", "wav"]
 
 INFILE_FMT = ["flac", "aac", "m4a", "mp3", "wav"]
 OUTFILE_FMT = ["srt", "json", "lrc", "txt"]
+
+
+def ffmpeg_render(media_file: str) -> bytes:
+    "提取视频伴音并转码为aac格式"
+    out, err = (
+        ffmpeg.input(media_file, v="warning")
+        .output("pipe:", ac=1, format="adts")
+        .run(capture_stdout=True)
+    )
+    return out
 
 
 def run_everywhere(argg):

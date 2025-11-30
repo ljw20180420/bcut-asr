@@ -41,29 +41,29 @@ pip install dist/bcut_asr-0.0.3-py3-none-any.whl # Example
 ### CLI Interface
 
 ```bash
-bcut_asr video.mp4
+bcut-asr video.mp4
 ```
 
 或
 
 ```bash
-bcut_asr video.mp4 subtitle.srt
+bcut-asr video.mp4 subtitle.srt
 ```
 
 或
 
 ```bash
-bcut_asr video.mp4 -f srt - > subtitle.srt
+bcut-asr video.mp4 -f srt - > subtitle.srt
 ```
 
 长音频指定任务状态轮询间隔(秒)，避免接口频繁调用
 
 ```bash
-bcut_asr video.mp4 -f srt -i 30 - > subtitle.srt
+bcut-asr video.mp4 -f srt -i 30 - > subtitle.srt
 ```
 
 ```
-bcut_asr -h
+bcut-asr -h
 usage: bcut-asr [-h] [-f [{srt,json,lrc,txt}]] [-i [1.0]] input [output]
 
 必剪语音识别
